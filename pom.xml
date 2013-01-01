@@ -79,7 +79,14 @@
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
-        <version>2.15.0</version>
+        <configuration>
+            <launchers>
+                <launcher>
+                    <id>MrMutator.main</id>
+                    <mainClass>pparkkin.scala.akka.practice.MrMutator</mainClass>
+                </launcher>
+            </launchers>
+        </configuration>
         <executions>
           <execution>
             <goals>
