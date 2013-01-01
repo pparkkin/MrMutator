@@ -8,4 +8,8 @@ class MrMutatorSuite extends FunSuite {
     assert(MrMutator.foo(Array()) == "")
   }
 
+  test("MrMutator.foo should return the strings in an Array concatenated") {
+    assert(MrMutator.foo(Array("Mr", "Mutator")) == "MrMutator")
+  }
+
 }
