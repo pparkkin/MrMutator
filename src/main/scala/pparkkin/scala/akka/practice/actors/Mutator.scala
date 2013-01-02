@@ -6,8 +6,12 @@ case class Mutate(information: Seq[Int])
 
 class Mutator extends Actor with ActorLogging {
   def receive =  {
-    case Mutate(data) => {
-      log.info("Received message 'Mutate' with data: "+data)
+    case Mutate(fst :: rest) => {
+      log.info("Received message 'Mutate' with data: "+(fst :: rest))
+      sender ! (fst + 1) :: rest
+    }
+    case msg => {
+      log.error("Received unknown message: "+msg)
     }
   }
 }
