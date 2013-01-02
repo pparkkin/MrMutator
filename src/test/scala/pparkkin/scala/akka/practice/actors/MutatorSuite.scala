@@ -14,6 +14,6 @@ class MutatorSuite(_system: ActorSystem) extends TestKit(_system) with FunSuite 
   test("Mutator returns genetic information mutated") {
     val actorRef = TestActorRef[Mutator]
     actorRef ! Mutate(List(1, 2, 3))
-    expectMsg(List(2, 2, 3))
+    expectMsg(Mutated(List(2, 2, 3)))
   }
 }
