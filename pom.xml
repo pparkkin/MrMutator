@@ -45,6 +45,11 @@
       <url>http://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
 -->
+      <repository>
+          <id>repo.akka.io</id>
+          <name>Typesafe Akka Repository</name>
+          <url>http://repo.akka.io/releases</url>
+      </repository>
   </repositories>
 
   <pluginRepositories>
@@ -61,6 +66,11 @@
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.typesafe.akka</groupId>
+        <artifactId>akka-actor</artifactId>
+        <version>2.0.4</version>
     </dependency>
 
     <!-- Test -->

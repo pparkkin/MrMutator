@@ -1,8 +1,5 @@
 package pparkkin.scala.akka.practice
 
-/**
- * @author ${user.name}
- */
 object MrMutator {
   
   def foo(x : Array[String]) = x.foldLeft("")((a,b) => a + b)
