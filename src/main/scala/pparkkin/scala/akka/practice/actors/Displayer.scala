@@ -2,7 +2,7 @@ package pparkkin.scala.akka.practice.actors
 
 import akka.actor.{ActorLogging, Actor}
 
-case class Display(information: Seq[Int])
+case class Display(information: List[Int])
 
 class Displayer extends Actor with ActorLogging {
 

@@ -1,15 +1,25 @@
 package pparkkin.scala.akka.practice.actors
 
 import akka.actor.{ActorLogging, Actor}
+import scala.math.abs
 
-case class Select(one: Seq[Int], two: Seq[Int])
-case class Selected(information: Seq[Int])
+case class Select(one: List[Int], two: List[Int])
+case class Selected(information: List[Int])
 
-class Selector extends Actor with ActorLogging {
+class Selector(target: List[Int]) extends Actor with ActorLogging {
+
+  def distance(as: List[Int], bs: List[Int]): Int = {
+    ( (as, bs).zipped map ((a: Int, b: Int) => abs(a - b)) ).sum
+  }
+
   def receive = {
-    case Select(one, _) =>
+    case Select(one, two) =>
       log.debug("Received Select message.")
-      sender ! Selected(one)
+      if ( distance(two, target) < distance(one, target) ) {
+        sender ! Selected(two)
+      } else {
+        sender ! Selected(one)
+      }
     case msg => {
       log.error("Received unknown message: "+msg)
     }

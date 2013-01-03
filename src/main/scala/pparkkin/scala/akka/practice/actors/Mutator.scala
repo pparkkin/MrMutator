@@ -2,8 +2,8 @@ package pparkkin.scala.akka.practice.actors
 
 import akka.actor.{ActorLogging, Actor}
 
-case class Mutate(information: Seq[Int])
-case class Mutated(information: Seq[Int])
+case class Mutate(information: List[Int])
+case class Mutated(information: List[Int])
 
 class Mutator extends Actor with ActorLogging {
   def receive =  {
