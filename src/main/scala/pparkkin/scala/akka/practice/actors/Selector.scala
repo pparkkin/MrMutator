@@ -2,13 +2,14 @@ package pparkkin.scala.akka.practice.actors
 
 import akka.actor.{ActorLogging, Actor}
 import scala.math.abs
+import collection.immutable
 
-case class Select(one: List[Int], two: List[Int])
-case class Selected(information: List[Int])
+case class Select(one: immutable.IndexedSeq[Int], two: immutable.IndexedSeq[Int])
+case class Selected(information: immutable.IndexedSeq[Int])
 
-class Selector(target: List[Int]) extends Actor with ActorLogging {
+class Selector(target: immutable.IndexedSeq[Int]) extends Actor with ActorLogging {
 
-  def distance(as: List[Int], bs: List[Int]): Int = {
+  def distance(as: immutable.IndexedSeq[Int], bs: immutable.IndexedSeq[Int]): Int = {
     ( (as, bs).zipped map ((a: Int, b: Int) => abs(a - b)) ).sum
   }
 

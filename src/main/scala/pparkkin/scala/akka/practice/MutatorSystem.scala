@@ -4,13 +4,14 @@ import actors._
 import akka.actor.{Actor, Props, ActorSystem}
 import akka.routing.RoundRobinRouter
 import akka.dispatch.Create
+import collection.immutable
 
 class MutatorSystem(name: String, nrOfMutators: Int) {
   def run() = {
     val system = ActorSystem(name)
 
     // Start up selector and displayer
-    val selector = system.actorOf(Props(new Selector(List(7, 7, 79))))
+    val selector = system.actorOf(Props(new Selector(immutable.Vector(7, 7, 79))))
     val displayer = system.actorOf(Props[Displayer])
 
     // Start up mutators with round robin router

@@ -1,25 +1,26 @@
 package pparkkin.scala.akka.practice.actors
 
 import akka.actor.{ActorRef, ActorLogging, Actor}
+import collection.immutable
 
 case class BeginMutating
 
 class Coordinator(mutators: ActorRef, selector: ActorRef, displayer: ActorRef, initialSeed: Int) extends Actor with ActorLogging {
 
-  var currentGen: List[List[Int]] = Nil
+  var currentGen: immutable.List[immutable.IndexedSeq[Int]] = Nil
 
-  def insertGeneticInformation(cur: List[List[Int]], inf: List[Int]): List[List[Int]] = {
+  def insertGeneticInformation(cur: immutable.List[immutable.IndexedSeq[Int]], inf: immutable.IndexedSeq[Int]): immutable.List[immutable.IndexedSeq[Int]] = {
     if (cur.size < initialSeed) {
       inf :: cur
     } else {
-      inf :: cur.take(initialSeed-1)
+      inf :: cur.take(cur.size-1)
     }
   }
 
   def beginMutating() = {
     // Seed current gen with genetic information
     1 to initialSeed foreach {
-      i => currentGen = insertGeneticInformation(currentGen, List(1, 2, 3))
+      i: Int => currentGen = insertGeneticInformation(currentGen, immutable.Vector(1, 2, 3))
     }
 
     // Start mutating!

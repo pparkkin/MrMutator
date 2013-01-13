@@ -1,8 +1,9 @@
 package pparkkin.scala.akka.practice.actors
 
 import akka.actor.{ActorLogging, Actor}
+import collection.immutable
 
-case class Display(information: List[Int])
+case class Display(information: immutable.IndexedSeq[Int])
 
 class Displayer extends Actor with ActorLogging {
 

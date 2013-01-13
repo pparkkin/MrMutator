@@ -3,6 +3,7 @@ package pparkkin.scala.akka.practice.actors
 import akka.testkit.{TestKit, ImplicitSender, TestActorRef}
 import akka.actor.ActorSystem
 import org.scalatest.{FunSuite, BeforeAndAfterAll}
+import collection.immutable
 
 class MutatorSuite(_system: ActorSystem) extends TestKit(_system) with FunSuite with BeforeAndAfterAll with ImplicitSender {
   def this() = this(ActorSystem("MutatorSuite"))
@@ -13,9 +14,9 @@ class MutatorSuite(_system: ActorSystem) extends TestKit(_system) with FunSuite 
 
   test("Mutator returns genetic information mutated") {
     val actorRef = TestActorRef[Mutator]
-    actorRef ! Mutate(List(1, 2, 3))
+    actorRef ! Mutate(immutable.Vector(1, 2, 3))
     expectMsgPF() {
-      case Mutated(i: List[Int]) => true
+      case Mutated(i: immutable.Vector[Int]) => true
     }
   }
 }
