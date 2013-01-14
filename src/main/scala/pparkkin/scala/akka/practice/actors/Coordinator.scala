@@ -3,7 +3,7 @@ package pparkkin.scala.akka.practice.actors
 import akka.actor.{ActorRef, ActorLogging, Actor}
 import collection.immutable
 
-case class BeginMutating
+case class BeginMutating()
 
 class Coordinator(mutators: ActorRef, selector: ActorRef, displayer: ActorRef, initialSeed: Int) extends Actor with ActorLogging {
 

@@ -67,6 +67,11 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
     </dependency>
+      <dependency>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-swing</artifactId>
+          <version>${scala.version}</version>
+      </dependency>
     <dependency>
         <groupId>com.typesafe.akka</groupId>
         <artifactId>akka-actor</artifactId>
@@ -103,6 +108,10 @@
                     <mainClass>pparkkin.scala.akka.practice.MrMutator</mainClass>
                 </launcher>
             </launchers>
+            <args>
+                <arg>-unchecked</arg>
+                <arg>-deprecation</arg>
+            </args>
         </configuration>
         <executions>
           <execution>
