@@ -4,11 +4,25 @@ import actors._
 import akka.actor.{Props, ActorSystem}
 import akka.routing.RoundRobinRouter
 import collection.immutable
+import java.awt.image.BufferedImage
 
-class MutatorSystem(val name: String) {
+class MutatorSystem(val name: String, val target: BufferedImage) {
+  private[this] val system: ActorSystem = ActorSystem(name)
+
   def run() = {
-    val system = ActorSystem(name)
 
+    if (target == null) {
+      system.log.error("Did not receive an image.")
+    } else {
+      system.log.info("Received image size "+target.getWidth+"x"+target.getHeight)
+//      val coordinator = setUpActors
+    }
+
+    system.shutdown()
+  }
+
+  private[this]
+  def setUpActors {
     // Start up selector and displayer
     val selector = system.actorOf(Props(new Selector(immutable.Vector(7, 7, 79))))
     val displayer = system.actorOf(Props[Displayer])
@@ -18,10 +32,6 @@ class MutatorSystem(val name: String) {
     val router = system.actorOf(Props[Mutator].withRouter(RoundRobinRouter(nrOfInstances = nrOfMutators)))
 
     // Create coordinator actor
-    val coordinator = system.actorOf(Props(new Coordinator(router, selector, displayer, nrOfMutators)))
-
-    // Begin!
-    coordinator ! BeginMutating
+    system.actorOf(Props(new Coordinator(router, selector, displayer, nrOfMutators)))
   }
-
 }
