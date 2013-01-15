@@ -2,9 +2,11 @@ package pparkkin.scala.akka.practice
 
 import javax.imageio.ImageIO
 import java.io.File
-import scala.swing._
+import swing._
 import java.awt.image.BufferedImage
-import javax.swing.JPanel
+import java.awt.{Graphics2D, Dimension}
+import scala.Some
+import javax.swing.Box
 
 object MrMutator extends SimpleSwingApplication {
 
@@ -12,9 +14,10 @@ object MrMutator extends SimpleSwingApplication {
   def main(args : Array[String]) {
     readImage(args) match {
       case Some(img) => {
-        val mutatorSystem = new MutatorSystem("MrMutator", img, p)
-        mutatorSystem.run()
         super.main(args)
+        setImage(img)
+//        val mutatorSystem = new MutatorSystem("MrMutator", img, p)
+//        mutatorSystem.run()
       }
       case None => {}
     }
@@ -30,17 +33,57 @@ object MrMutator extends SimpleSwingApplication {
 
   def top = new MainFrame {
     title = "MrMutator"
-    contents = p
+    contents = new BoxPanel(Orientation.Horizontal) {
+      contents += targetPanel
+      contents += Swing.HStrut(3)
+      contents += currentPanel
+      border = Swing.EmptyBorder(3, 3, 3, 3)
+    }
   }
 
-  val p = new DrawingPanel {
-    preferredSize = new Dimension(200, 200)
+  def setImage(img: BufferedImage) {
+    targetPanel.setImage(img)
+    currentPanel.setImage(img)
+  }
+
+  val targetPanel = new Panel {
+    var img: Option[BufferedImage] = None
+
+    def setImage(img: BufferedImage) {
+      preferredSize = new Dimension(img.getWidth, img.getHeight)
+      this.img = Some(img)
+      repaint()
+    }
+
+    override
+    def paintComponent(g: Graphics2D) {
+      this.img match {
+        case Some(i) =>
+          g.drawImage(i, 0, 0, null)
+        case None => None
+      }
+    }
+  }
+
+  val currentPanel = new Panel {
+    var img: Option[BufferedImage] = None
+
+    def setImage(img: BufferedImage) {
+      preferredSize = new Dimension(img.getWidth, img.getHeight)
+      this.img = Some(img)
+      repaint()
+    }
+
+    override
+    def paintComponent(g: Graphics2D) {
+      this.img match {
+        case Some(i) =>
+          g.drawImage(i, 0, 0, null)
+        case None => None
+      }
+    }
   }
 
 }
 
-class DrawingPanel extends Panel {
-  override lazy val peer: JPanel = new JPanel with SuperMixin
-  def getGraphics = peer.getGraphics
-}
 

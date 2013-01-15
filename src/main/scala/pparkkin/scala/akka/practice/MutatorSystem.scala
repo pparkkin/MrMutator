@@ -5,8 +5,9 @@ import akka.actor.{ActorRef, Props, ActorSystem}
 import akka.routing.RoundRobinRouter
 import collection.immutable
 import java.awt.image.BufferedImage
+import swing.Panel
 
-class MutatorSystem(val name: String, val target: BufferedImage, val panel: DrawingPanel) {
+class MutatorSystem(val name: String, val target: BufferedImage, val panel: Panel) {
   private[this] val system: ActorSystem = ActorSystem(name)
 
   def run() = {
