@@ -33,11 +33,11 @@ class Coordinator(mutators: ActorRef, selector: ActorRef, displayer: ActorRef, i
     case BeginMutating =>
       beginMutating
     case Mutated(i) =>
-      selector ! Select(i, currentGen head)
+      selector ! Select(i, currentGen.head)
     case Selected(i) =>
       displayer ! Display(i)
       currentGen = insertGeneticInformation(currentGen, i)
-      mutators ! Mutate(currentGen head)
+      mutators ! Mutate(currentGen.head)
     case msg =>
       log.error("Received unknown message: "+msg)
   }

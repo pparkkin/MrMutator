@@ -18,8 +18,8 @@
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.9.2</scala.version>
-    <akka.version>2.0.4</akka.version>
+    <scala.version>2.10.0</scala.version>
+    <akka.version>2.1.0</akka.version>
     <scalatest.version>1.8</scalatest.version>
   </properties>
 
@@ -74,7 +74,7 @@
       </dependency>
     <dependency>
         <groupId>com.typesafe.akka</groupId>
-        <artifactId>akka-actor</artifactId>
+        <artifactId>akka-actor_2.10</artifactId>
         <version>${akka.version}</version>
     </dependency>
 
@@ -87,7 +87,7 @@
     </dependency>
       <dependency>
           <groupId>com.typesafe.akka</groupId>
-          <artifactId>akka-testkit</artifactId>
+          <artifactId>akka-testkit_2.10</artifactId>
           <version>${akka.version}</version>
           <scope>test</scope>
       </dependency>
@@ -111,6 +111,7 @@
             <args>
                 <arg>-unchecked</arg>
                 <arg>-deprecation</arg>
+                <arg>-feature</arg>
             </args>
         </configuration>
         <executions>
