@@ -5,7 +5,7 @@ import java.io.File
 import model.GeneticInformation
 import swing._
 import java.awt.image.BufferedImage
-import java.awt.{Graphics2D, Dimension}
+import java.awt.{Color, Graphics2D, Dimension}
 import scala.Some
 import javax.swing.Box
 
@@ -16,11 +16,12 @@ object MrMutator extends SimpleSwingApplication {
     readImage(args) match {
       case Some(img) => {
         super.main(args)
-//        secondFrame.visible = true
-        setImage(img)
+        targetPanel.setImage(img)
         val range = math.max(img.getHeight, img.getWidth)
         val gi = GeneticInformation.random(range - (range % 7))
-//        val mutatorSystem = new MutatorSystem("MrMutator", img, p)
+        val curF = currentFrame(currentPanel(img.getWidth, img.getHeight, gi))
+        curF.visible = true
+//        val mutatorSystem = new MutatorSystem("MrMutator", img, gi)
 //        mutatorSystem.run()
       }
       case None => {}
@@ -40,20 +41,13 @@ object MrMutator extends SimpleSwingApplication {
     contents = new BoxPanel(Orientation.Horizontal) {
       contents += targetPanel
     }
-    val secondFrame = currentFrame
-    secondFrame.visible = true
   }
 
-  def currentFrame = new Frame {
+  def currentFrame(panel: Panel) = new Frame {
     title = "MrMutator - Current"
     contents = new BoxPanel(Orientation.Horizontal) {
-      contents += currentPanel
+      contents += panel
     }
-  }
-
-  def setImage(img: BufferedImage) {
-    targetPanel.setImage(img)
-    currentPanel.setImage(img)
   }
 
   val targetPanel = new Panel {
@@ -75,22 +69,13 @@ object MrMutator extends SimpleSwingApplication {
     }
   }
 
-  val currentPanel = new Panel {
-    var img: Option[BufferedImage] = None
-
-    def setImage(img: BufferedImage) {
-      preferredSize = new Dimension(img.getWidth, img.getHeight)
-      this.img = Some(img)
-      repaint()
-    }
+  def currentPanel(width: Int, height: Int, gi: GeneticInformation) = new Panel {
+    preferredSize = new Dimension(width, height)
 
     override
     def paintComponent(g: Graphics2D) {
-      this.img match {
-        case Some(i) =>
-          g.drawImage(i, 0, 0, null)
-        case None => None
-      }
+      g.setColor(Color.BLACK)
+      g.fillRect(0, 0, size.width, size.height)
     }
   }
 
