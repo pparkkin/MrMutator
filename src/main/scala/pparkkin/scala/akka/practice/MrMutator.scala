@@ -2,6 +2,7 @@ package pparkkin.scala.akka.practice
 
 import javax.imageio.ImageIO
 import java.io.File
+import model.GeneticInformation
 import swing._
 import java.awt.image.BufferedImage
 import java.awt.{Graphics2D, Dimension}
@@ -17,6 +18,8 @@ object MrMutator extends SimpleSwingApplication {
         super.main(args)
 //        secondFrame.visible = true
         setImage(img)
+        val range = math.max(img.getHeight, img.getWidth)
+        val gi = GeneticInformation.random(range - (range % 7))
 //        val mutatorSystem = new MutatorSystem("MrMutator", img, p)
 //        mutatorSystem.run()
       }
