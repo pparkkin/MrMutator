@@ -15,6 +15,7 @@ object MrMutator extends SimpleSwingApplication {
     readImage(args) match {
       case Some(img) => {
         super.main(args)
+//        secondFrame.visible = true
         setImage(img)
 //        val mutatorSystem = new MutatorSystem("MrMutator", img, p)
 //        mutatorSystem.run()
@@ -32,12 +33,18 @@ object MrMutator extends SimpleSwingApplication {
   }
 
   def top = new MainFrame {
-    title = "MrMutator"
+    title = "MrMutator - Target"
     contents = new BoxPanel(Orientation.Horizontal) {
       contents += targetPanel
-      contents += Swing.HStrut(3)
+    }
+    val secondFrame = currentFrame
+    secondFrame.visible = true
+  }
+
+  def currentFrame = new Frame {
+    title = "MrMutator - Current"
+    contents = new BoxPanel(Orientation.Horizontal) {
       contents += currentPanel
-      border = Swing.EmptyBorder(3, 3, 3, 3)
     }
   }
 
