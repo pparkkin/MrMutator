@@ -3,7 +3,7 @@ package pparkkin.scala.akka.practice.model
 import collection.immutable
 import util.Random
 
-class GeneticInformation(val data: immutable.IndexedSeq[Int])
+class GeneticInformation(val data: immutable.IndexedSeq[Float])
 
 // The data in the genetic information is simply a list integers with
 // length % 10 == 0. So n sets of 10 integers.
@@ -17,6 +17,6 @@ object GeneticInformation {
   def random(len: Int): GeneticInformation = {
     assert(len % SET_SIZE == 0)
 
-    new GeneticInformation(1 to len map (_ => Random.nextInt(256)))
+    new GeneticInformation(1 to len map (_ => Random.nextFloat()))
   }
 }

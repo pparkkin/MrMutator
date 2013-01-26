@@ -81,7 +81,7 @@ object MrMutator extends SimpleSwingApplication {
       fillPolygons(g, gi.data)
     }
 
-    def fillPolygons(g: Graphics2D, data: immutable.IndexedSeq[Int]) {
+    def fillPolygons(g: Graphics2D, data: immutable.IndexedSeq[Float]) {
       if (data.length < GeneticInformation.SET_SIZE) return
 
       val c = constructColor(data)
@@ -98,7 +98,7 @@ object MrMutator extends SimpleSwingApplication {
       fillPolygons(g, data.drop(GeneticInformation.SET_SIZE))
     }
 
-    def constructColor(data: immutable.IndexedSeq[Int]): Option[Color] = {
+    def constructColor(data: immutable.IndexedSeq[Float]): Option[Color] = {
       if (data.length < 4) None
 
       val r = data(0)
@@ -111,11 +111,11 @@ object MrMutator extends SimpleSwingApplication {
       Some(new Color(r, g, b, a))
     }
 
-    def constructPolygon(data: immutable.IndexedSeq[Int]): Option[Polygon] = {
+    def constructPolygon(data: immutable.IndexedSeq[Float]): Option[Polygon] = {
       if (data.length < 6) None
 
-      val xs = data.take(3)
-      val ys = data.drop(3).take(3)
+      val xs = data.take(3).map { x => (x * width).toInt }
+      val ys = data.drop(3).take(3).map { y => (y * height).toInt }
 
       print(" -> ")
       println(xs, ys)
