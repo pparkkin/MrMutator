@@ -5,35 +5,34 @@ import akka.actor.{ActorRef, Props, ActorSystem}
 import akka.routing.RoundRobinRouter
 import collection.immutable
 import java.awt.image.BufferedImage
+import model.GeneticMaterial
 import swing.Panel
 
-class MutatorSystem(val name: String, val target: BufferedImage, val panel: Panel) {
-  private[this] val system: ActorSystem = ActorSystem(name)
+class MutatorSystem(val name: String, val genepool: GeneticMaterial,  panel: Panel) {
+  val system: ActorSystem = ActorSystem(name)
 
-  def run() = {
+  def run() {
 
-    if (target == null) {
-      system.log.error("Did not receive an image.")
-    } else {
-      system.log.info("Received image size "+target.getWidth+"x"+target.getHeight)
-      val coordinator = setUpActors
-      coordinator ! BeginMutating
-    }
+//    while (true) {
+//      data.data = GeneticMaterial.random(data.data.length).data
+//      panel.repaint()
+//      Thread.sleep(1000)
+//    }
+
+    val (mutator, _, _) = setUpActors
+    mutator ! Mutate
 
 //    system.shutdown()
   }
 
-  private[this]
-  def setUpActors: ActorRef = {
+  def setUpActors: (ActorRef, ActorRef, ActorRef) = {
     // Start up selector and displayer
-    val selector = system.actorOf(Props(new Selector(immutable.Vector(7, 7, 79))))
     val displayer = system.actorOf(Props(new Displayer(panel)))
+    val selector = system.actorOf(Props(new Selector(genepool, displayer)))
 
-    // Start up mutators with round robin router
-    val nrOfMutators = system.settings.config.getInt("pparkkin.scala.akka.practice.number-of-mutators")
-    val router = system.actorOf(Props[Mutator].withRouter(RoundRobinRouter(nrOfInstances = nrOfMutators)))
+    // Start up mutator
+    val mutator = system.actorOf(Props(new Mutator(genepool, selector)))
 
-    // Create coordinator actor
-    system.actorOf(Props(new Coordinator(router, selector, displayer, nrOfMutators)))
+    (mutator, selector, displayer)
   }
 }

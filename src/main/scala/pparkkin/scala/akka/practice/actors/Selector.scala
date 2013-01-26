@@ -1,29 +1,30 @@
 package pparkkin.scala.akka.practice.actors
 
-import akka.actor.{ActorLogging, Actor}
+import akka.actor.{ActorRef, ActorLogging, Actor}
 import scala.math.abs
 import collection.immutable
+import java.awt.image.BufferedImage
+import pparkkin.scala.akka.practice.model.GeneticMaterial
 
-case class Select(one: immutable.IndexedSeq[Int], two: immutable.IndexedSeq[Int])
-case class Selected(information: immutable.IndexedSeq[Int])
+case class Select(one: immutable.IndexedSeq[Float])
+//case class Selected(one: immutable.IndexedSeq[Float])
 
-class Selector(target: immutable.IndexedSeq[Int]) extends Actor with ActorLogging {
-
-  def distance(as: immutable.IndexedSeq[Int], bs: immutable.IndexedSeq[Int]): Int = {
-    ( (as, bs).zipped map ((a: Int, b: Int) => abs(a - b)) ).sum
-  }
+class Selector(gm: GeneticMaterial, displayer: ActorRef) extends Actor with ActorLogging {
 
   def receive = {
-    case Select(one, two) =>
-      log.debug("Received Select message.")
-      if ( distance(two, target) < distance(one, target) ) {
-        sender ! Selected(two)
-      } else {
-        sender ! Selected(one)
-      }
+    case Select(one) => {
+      log.debug("Compare to best. If better, replace and inform display.")
+      gm.push(one)
+      displayer ! Display
+      sender ! Mutate
+    }
     case msg => {
       log.error("Received unknown message: "+msg)
     }
   }
+
+  //  def distance(as: immutable.IndexedSeq[Float], bs: immutable.IndexedSeq[Float]): Float = {
+  //    ( (as, bs).zipped map { (a: Float, b: Float) => abs(a - b) } ).sum
+  //  }
 
 }
