@@ -28,7 +28,9 @@ object MrMutator extends SimpleSwingApplication {
         val panel = new DisplayPanel(img.getWidth, img.getHeight, gi)
 
         // Attach current status image panel to frame and visible
-        val curF = currentFrame(panel)
+        val curF = new DisplayFrame(panel)
+        val b = mainFrame.bounds
+        curF.bounds = new Rectangle((b.x+b.width), b.y, b.width, b.height)
         curF.visible = true
 
         // Create actor system
@@ -49,14 +51,16 @@ object MrMutator extends SimpleSwingApplication {
     }
   }
 
-  def top = new MainFrame {
+  def top = mainFrame
+
+  lazy val mainFrame = new MainFrame {
     title = "MrMutator - Target"
     contents = new BoxPanel(Orientation.Horizontal) {
       contents += targetPanel
     }
   }
 
-  def currentFrame(panel: Panel) = new Frame {
+  class DisplayFrame(panel: Panel) extends Frame {
     title = "MrMutator - Current"
     contents = new BoxPanel(Orientation.Horizontal) {
       contents += panel
