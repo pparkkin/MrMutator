@@ -9,7 +9,7 @@ import java.awt.{Polygon, Color, Graphics2D, Dimension}
 import scala.Some
 import javax.swing.Box
 import collection.immutable
-import view.DisplayPanel
+import view.{ImagePanel, DisplayPanel}
 
 object MrMutator extends SimpleSwingApplication {
 
@@ -63,24 +63,7 @@ object MrMutator extends SimpleSwingApplication {
     }
   }
 
-  val targetPanel = new Panel {
-    var img: Option[BufferedImage] = None
-
-    def setImage(img: BufferedImage) {
-      preferredSize = new Dimension(img.getWidth, img.getHeight)
-      this.img = Some(img)
-      repaint()
-    }
-
-    override
-    def paintComponent(g: Graphics2D) {
-      this.img match {
-        case Some(i) =>
-          g.drawImage(i, 0, 0, null)
-        case None => None
-      }
-    }
-  }
+  val targetPanel = new ImagePanel
 
 }
 
