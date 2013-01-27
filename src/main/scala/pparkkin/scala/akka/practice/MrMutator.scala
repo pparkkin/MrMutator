@@ -29,6 +29,7 @@ object MrMutator extends SimpleSwingApplication {
 
         // Attach current status image panel to frame and visible
         val curF = new DisplayFrame(panel)
+        // Place next to the target image panel
         val b = mainFrame.bounds
         curF.bounds = new Rectangle((b.x+b.width), b.y, b.width, b.height)
         curF.visible = true
@@ -53,6 +54,13 @@ object MrMutator extends SimpleSwingApplication {
 
   def top = mainFrame
 
+  /* In order to conform to Swing's threading policy, never implement top or
+     any additional member that created Swing components as a value unless
+     component creation happens on the EDT (see Swing.onEDT and
+     Swing.onEDTWait). Lazy values are okay for the same reason if they are
+     initialized on the EDT always.
+     http://www.scala-lang.org/api/current/index.html#scala.swing.SimpleSwingApplication
+    */
   lazy val mainFrame = new MainFrame {
     title = "MrMutator - Target"
     contents = new BoxPanel(Orientation.Horizontal) {

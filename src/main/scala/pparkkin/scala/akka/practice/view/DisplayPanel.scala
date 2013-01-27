@@ -13,7 +13,7 @@ class DisplayPanel(width: Int, height: Int, gi: GeneticMaterial) extends Panel {
   def paintComponent(g: Graphics2D) {
     g.setColor(Color.BLACK)
     g.fillRect(0, 0, size.width, size.height)
-    fillPolygons(g, gi.head)
+    fillPolygons(g, gi.head.seq)
   }
 
   def fillPolygons(g: Graphics2D, data: immutable.IndexedSeq[Float]) {

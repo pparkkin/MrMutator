@@ -4,10 +4,10 @@ import collection.immutable
 import util.Random
 import java.awt.image.BufferedImage
 
-class GeneticMaterial(private[this] var target: BufferedImage, private[this] var data: immutable.Seq[immutable.IndexedSeq[Float]]) {
+class GeneticMaterial(val target: BufferedImage, private[this] var data: immutable.Seq[GeneticSequence]) {
 
-  def head: immutable.IndexedSeq[Float] = data.head
-  def push(s: immutable.IndexedSeq[Float]) { data = immutable.Vector(s) }
+  def head: GeneticSequence = data.head
+  def push(s: GeneticSequence) { data = immutable.Vector(s) }
 
 }
 
@@ -28,6 +28,6 @@ object GeneticMaterial {
     new GeneticMaterial(img, immutable.Vector(randomSequence(len)))
   }
 
-  def randomSequence(len: Int): immutable.IndexedSeq[Float] = 1 to len map (_ => Random.nextFloat())
+  def randomSequence(len: Int): GeneticSequence = new GeneticSequence(1 to len map (_ => Random.nextFloat()))
 
 }
