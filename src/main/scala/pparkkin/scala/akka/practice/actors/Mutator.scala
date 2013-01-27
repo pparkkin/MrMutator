@@ -13,7 +13,6 @@ class Mutator(gm: GeneticMaterial, selector: ActorRef) extends Actor with ActorL
 
   def receive =  {
     case Mutate => {
-      log.debug("Get top genetic material, mutate, and send to Selector")
       val m = gm.head
       val seq = mutate(m.seq)
       selector ! Select(new GeneticSequence(seq))
