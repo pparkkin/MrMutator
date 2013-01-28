@@ -1,11 +1,13 @@
 package pparkkin.scala.akka.practice.actors
 
 import akka.actor.{ActorRef, ActorLogging, Actor}
-import scala.math.abs
-import collection.immutable
 import java.awt.image.BufferedImage
 import pparkkin.scala.akka.practice.model.{GeneticSequence, GeneticMaterial}
 import pparkkin.scala.akka.practice.view.ImageBuilder
+import concurrent.{Await, ExecutionContext, Future, future}
+import concurrent.duration._
+import ExecutionContext.Implicits.global
+import util.Success
 
 case class Select(one: GeneticSequence)
 //case class Selected(one: immutable.IndexedSeq[Float])
@@ -31,14 +33,23 @@ class Selector(gm: GeneticMaterial, displayer: ActorRef) extends Actor with Acto
   }
 
   def compare(f: GeneticSequence, s: GeneticSequence): Float = {
-    val fi = imageBuilder.buildImage(f)
-    val si = imageBuilder.buildImage(s)
+    val ff: Future[Float] = future {
+      distance(f, tg)
+    }
 
-    val a = distance(fi, tg)
-    val b = distance(si, tg)
+    val sf: Future[Float] = future {
+      distance(s, tg)
+    }
 
-    b - a
+    val r = for { a <- ff
+                  b <- sf } yield b - a
 
+    Await.result(r, 5.seconds)
+  }
+
+  def distance(gs: GeneticSequence, tg: BufferedImage): Float = {
+    val img = imageBuilder.buildImage(gs)
+    distance(img, tg)
   }
 
   def distance(fi: BufferedImage, si: BufferedImage): Float = {
