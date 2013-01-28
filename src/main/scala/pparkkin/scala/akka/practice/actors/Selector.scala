@@ -48,8 +48,15 @@ class Selector(gm: GeneticMaterial, displayer: ActorRef) extends Actor with Acto
   }
 
   def distance(gs: GeneticSequence, tg: BufferedImage): Float = {
-    val img = imageBuilder.buildImage(gs)
-    distance(img, tg)
+    gs.distance match {
+      case Some(d) => d
+      case None => {
+        val img = imageBuilder.buildImage(gs)
+        val d = distance(img, tg)
+        gs.distance = Some(d)
+        d
+      }
+    }
   }
 
   def distance(fi: BufferedImage, si: BufferedImage): Float = {
