@@ -1,7 +1,7 @@
 package pparkkin.scala.akka.practice.actors
 
 import akka.actor.{ActorRef, ActorLogging, Actor}
-import java.awt.image.BufferedImage
+import java.awt.image.{Raster, BufferedImage}
 import pparkkin.scala.akka.practice.model.{GeneticSequence, GeneticMaterial}
 import pparkkin.scala.akka.practice.view.ImageBuilder
 import concurrent.{Await, ExecutionContext, Future, future}
@@ -52,20 +52,20 @@ class Selector(gm: GeneticMaterial, displayer: ActorRef) extends Actor with Acto
       case Some(d) => d
       case None => {
         val img = imageBuilder.buildImage(gs)
-        val d = distance(img, tg)
+        val d = distance(img.getData, tg.getData)
         gs.distance = Some(d)
         d
       }
     }
   }
 
-  def distance(fi: BufferedImage, si: BufferedImage): Float = {
+  def distance(f: Raster, s: Raster): Float = {
     var sum = 0f
     var count = 0
 
-    for (j <- 0 until fi.getHeight) {
-      for (i <- 0 until si.getWidth) {
-        sum += distanceRGB(fi.getRGB(i, j), si.getRGB(i, j))
+    for (j <- 0 until f.getHeight) {
+      for (i <- 0 until s.getWidth) {
+        sum += distanceRGB(f.getPixel(i, j, null), s.getPixel(i, j, null))
         count += 1
       }
     }
@@ -77,23 +77,9 @@ class Selector(gm: GeneticMaterial, displayer: ActorRef) extends Actor with Acto
     }
   }
 
-  def distanceRGB(f: Int, s: Int): Float = {
-    val (fr, fg, fb, _) = splitRGB(f)
-    val (sr, sg, sb, _) = splitRGB(s)
-
-    (math.abs(fr-sr) + math.abs(fg-sg) + math.abs(fb-sb))/3f
+  def distanceRGB(f: Array[Int], s: Array[Int]): Float = {
+    (f, s).zipped.map((a,b) => { math.abs(a - b)}).sum
 
   }
-
-  def splitRGB(r: Int): (Int, Int, Int, Int) = {
-    ((r >> 24) & 0xF,
-     (r >> 16) & 0xF,
-     (r >> 8) & 0xF,
-     r & 0xF)
-  }
-
-  //  def distance(as: immutable.IndexedSeq[Float], bs: immutable.IndexedSeq[Float]): Float = {
-  //    ( (as, bs).zipped map { (a: Float, b: Float) => abs(a - b) } ).sum
-  //  }
 
 }
