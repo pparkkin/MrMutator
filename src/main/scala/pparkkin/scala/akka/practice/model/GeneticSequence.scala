@@ -11,3 +11,7 @@ class GeneticSequence(val seq: immutable.IndexedSeq[Float], var distance: Option
   def length = seq.length
 
 }
+
+object GeneticSequence {
+  def empty: GeneticSequence = new GeneticSequence(immutable.IndexedSeq.empty)
+}

@@ -22,7 +22,7 @@ object MrMutator extends SimpleSwingApplication {
         targetPanel.setImage(img)
 
         // Init genetic material
-        val gi = GeneticMaterial.random(img)
+        val gi = GeneticMaterial.empty(img)
 
         // Set up current status image panel
         val panel = new DisplayPanel(img.getWidth, img.getHeight, gi)
