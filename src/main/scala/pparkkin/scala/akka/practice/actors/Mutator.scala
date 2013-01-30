@@ -9,13 +9,14 @@ import pparkkin.scala.akka.practice.model.{GeneticSequence, GeneticMaterial}
 case object Mutate
 //case class Mutated(information: immutable.IndexedSeq[Float])
 
-class Mutator(gm: GeneticMaterial, selector: ActorRef) extends Actor with ActorLogging {
+class Mutator(gm: GeneticMaterial, selector: ActorRef, counter: ActorRef) extends Actor with ActorLogging {
 
   def receive =  {
     case Mutate => {
       val m = gm.head
       val seq = mutate(m.seq)
       selector ! Select(new GeneticSequence(seq))
+      counter ! Increment
     }
     case msg => {
       log.error("Received unknown message: "+msg)

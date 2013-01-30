@@ -12,7 +12,7 @@ import util.Success
 case class Select(one: GeneticSequence)
 //case class Selected(one: immutable.IndexedSeq[Float])
 
-class Selector(gm: GeneticMaterial, displayer: ActorRef) extends Actor with ActorLogging {
+class Selector(gm: GeneticMaterial, displayer: ActorRef, counter: ActorRef) extends Actor with ActorLogging {
   val tg = gm.target
   val imageBuilder = new ImageBuilder(tg.getWidth, tg.getHeight, tg.getType)
 
@@ -25,6 +25,7 @@ class Selector(gm: GeneticMaterial, displayer: ActorRef) extends Actor with Acto
       if (compare(one, gm.head) > 0) {
         gm.push(one)
         displayer ! Display
+        counter ! Increment
       }
     }
     case msg => {

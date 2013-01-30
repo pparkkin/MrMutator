@@ -2,7 +2,7 @@ package pparkkin.scala.akka.practice
 
 import javax.imageio.ImageIO
 import java.io.File
-import model.GeneticMaterial
+import model.{DebugInformation, GeneticMaterial}
 import swing._
 import java.awt.image.BufferedImage
 import java.awt.{Polygon, Color, Graphics2D, Dimension}
@@ -24,8 +24,11 @@ object MrMutator extends SimpleSwingApplication {
         // Init genetic material
         val gi = GeneticMaterial.empty(img)
 
+        // Debug information
+        val di = new DebugInformation
+
         // Set up current status image panel
-        val panel = new DisplayPanel(img.getWidth, img.getHeight, gi)
+        val panel = new DisplayPanel(img.getWidth, img.getHeight, gi, di)
 
         // Attach current status image panel to frame and visible
         val curF = new DisplayFrame(panel)
@@ -35,7 +38,7 @@ object MrMutator extends SimpleSwingApplication {
         curF.visible = true
 
         // Create actor system
-        val mutatorSystem = new MutatorSystem("MrMutator", gi, panel)
+        val mutatorSystem = new MutatorSystem("MrMutator", gi, panel, di)
 
         // Run it
         mutatorSystem.run()
