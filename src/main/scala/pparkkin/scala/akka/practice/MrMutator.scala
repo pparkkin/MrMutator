@@ -48,7 +48,14 @@ object MrMutator extends SwingApplication {
     if (args.length > 0) {
       Some(ImageIO.read(new File(args(0))))
     } else {
-      None
+      val chooser = new FileChooser
+      chooser.title = "Select image."
+      val result = chooser.showOpenDialog(null)
+      if (result == FileChooser.Result.Approve) {
+        Some(ImageIO.read(chooser.selectedFile))
+      } else {
+        None
+      }
     }
   }
 
