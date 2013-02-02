@@ -5,21 +5,18 @@ import java.io.File
 import model.{DebugInformation, GeneticMaterial}
 import swing._
 import java.awt.image.BufferedImage
-import java.awt.{Polygon, Color, Graphics2D, Dimension}
 import scala.Some
-import javax.swing.Box
-import collection.immutable
 import view.{ImagePanel, DisplayPanel}
 
-object MrMutator extends SimpleSwingApplication {
+object MrMutator extends SwingApplication {
 
-  override
-  def main(args : Array[String]) {
+  def startup(args : Array[String]) {
     readImage(args) match {
       case Some(img) => {
-        super.main(args)
-        // Set up target image panel
-        targetPanel.setImage(img)
+
+        val tp = new ImagePanel(img)
+        val mf = new MrMutatorFrame(tp)
+        mf.visible = true
 
         // Init genetic material
         val gi = GeneticMaterial.empty(img)
@@ -33,7 +30,7 @@ object MrMutator extends SimpleSwingApplication {
         // Attach current status image panel to frame and visible
         val curF = new DisplayFrame(panel)
         // Place next to the target image panel
-        val b = mainFrame.bounds
+        val b = mf.bounds
         curF.bounds = new Rectangle((b.x+b.width), b.y, b.width, b.height)
         curF.visible = true
 
@@ -55,30 +52,15 @@ object MrMutator extends SimpleSwingApplication {
     }
   }
 
-  def top = mainFrame
-
-  /* In order to conform to Swing's threading policy, never implement top or
-     any additional member that created Swing components as a value unless
-     component creation happens on the EDT (see Swing.onEDT and
-     Swing.onEDTWait). Lazy values are okay for the same reason if they are
-     initialized on the EDT always.
-     http://www.scala-lang.org/api/current/index.html#scala.swing.SimpleSwingApplication
-    */
-  lazy val mainFrame = new MainFrame {
+  class MrMutatorFrame(panel: Panel) extends Frame {
     title = "MrMutator - Target"
-    contents = new BoxPanel(Orientation.Horizontal) {
-      contents += targetPanel
-    }
+    contents = panel
   }
 
   class DisplayFrame(panel: Panel) extends Frame {
     title = "MrMutator - Current"
-    contents = new BoxPanel(Orientation.Horizontal) {
-      contents += panel
-    }
+    contents = panel
   }
-
-  val targetPanel = new ImagePanel
 
 }
 

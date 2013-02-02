@@ -4,22 +4,13 @@ import java.awt.image.BufferedImage
 import java.awt.{Graphics2D, Dimension}
 import swing.Panel
 
-class ImagePanel extends Panel {
-  var img: Option[BufferedImage] = None
+class ImagePanel(val img: BufferedImage) extends Panel {
 
-  def setImage(img: BufferedImage) {
-    preferredSize = new Dimension(img.getWidth, img.getHeight)
-    this.img = Some(img)
-    repaint()
-  }
+  preferredSize = new Dimension(img.getWidth, img.getHeight)
 
   override
   def paintComponent(g: Graphics2D) {
-    this.img match {
-      case Some(i) =>
-        g.drawImage(i, 0, 0, null)
-      case None => None
-    }
+    g.drawImage(img, 0, 0, null)
   }
 
 }
